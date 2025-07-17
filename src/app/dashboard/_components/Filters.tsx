@@ -1,110 +1,30 @@
 'use client'
 
-import React, { useMemo, useEffect, useState } from 'react'
+import React from 'react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Filter, X, Calendar } from 'lucide-react'
+import { Filter, X, Calendar, ArrowUpDown } from 'lucide-react'
 import { DebouncedSearchInput } from './DebouncedSearch'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { Event } from '@/lib/db'
-import { useForm, Controller } from 'react-hook-form'
+import { Controller } from 'react-hook-form'
 import DateTime from '../_components/DateTime'
 import { Button } from '@/components/ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { FilterForm, useFilter } from '@/context/FilterContext'
 
-type FilterType = 'All' | 'Online' | 'In-Person'
+const Filters = () => {
+    const { 
+        methods, 
+        query, 
+        setQuery, 
+        categories, 
+        resetFilters,
+        hasActiveFilters 
+    } = useFilter()
 
-interface FilterProps {
-    events: Event[]
-    setFilteredEvents: (events: Event[]) => void
-}
-
-type FilterForm = {
-    type: FilterType
-    category: string
-    startDate: Date | null
-    endDate: Date | null
-}
-
-const Filters = ({ events, setFilteredEvents }: FilterProps) => {
-    const searchParams = useSearchParams()
-    const router = useRouter()
-
-    const initialQuery = searchParams.get('query') || ''
-    const [searchTerm, setSearchTerm] = useState(initialQuery)
-
-    const categories = useMemo(
-        () => Array.from(new Set(events.map(event => event.category))),
-        [events]
-    )
-
-    const { control, watch, setValue, reset } = useForm<FilterForm>({
-        defaultValues: {
-            type: (searchParams.get('type') as FilterType) || 'All',
-            category: searchParams.get('category') || 'All',
-            startDate: null,
-            endDate: null
-        }
-    })
-
-    const { type, category, startDate, endDate } = watch()
-
-    const filteredEvents = useMemo(() => {
-        return events.filter(event => {
-            const matchesSearch =
-                searchTerm.trim() === '' ||
-                event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                event.description.toLowerCase().includes(searchTerm.toLowerCase())
-
-            const matchesType =
-                type === 'All' || event.eventType === type
-
-            const matchesCategory =
-                category === 'All' || event.category === category
-
-            const eventDate = new Date(event.startDateTime)
-            const matchesDate =
-                (!startDate || eventDate >= startDate) &&
-                (!endDate || eventDate <= endDate)
-
-            return matchesSearch && matchesType && matchesCategory && matchesDate
-        })
-    }, [events, searchTerm, type, category, startDate, endDate])
-
-    useEffect(() => {
-        setFilteredEvents(filteredEvents)
-    }, [filteredEvents])
-
-    const handleSearch = (query: string) => {
-        const params = new URLSearchParams(window.location.search)
-        setSearchTerm(query)
-        params.set('query', query)
-        router.push(`?${params.toString()}`, { scroll: false })
-    }
+    const { control, watch, setValue } = methods
+    const { startDate, endDate } = watch()
 
     const handleFilterChange = (name: keyof FilterForm, value: string) => {
-        const params = new URLSearchParams(window.location.search)
-        params.set(name, value)
-        router.push(`?${params.toString()}`, { scroll: false })
-    }
-
-    const hasActiveFilters = useMemo(() => {
-        return type !== 'All' ||
-            category !== 'All' ||
-            startDate !== null ||
-            endDate !== null ||
-            searchTerm !== ''
-    }, [type, category, startDate, endDate, searchTerm])
-
-
-    const resetFilters = () => {
-        reset({
-            type: 'All',
-            category: 'All',
-            startDate: null,
-            endDate: null
-        })
-        setSearchTerm('')
-        router.push('?', { scroll: false })
+        setValue(name, value as string)
     }
 
     const hasDateFilters = startDate || endDate
@@ -127,10 +47,10 @@ const Filters = ({ events, setFilteredEvents }: FilterProps) => {
                 )}
             </div>
 
-            <div className="grid items-end grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid items-end grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                 <DebouncedSearchInput
-                    value={searchTerm}
-                    onDebounceChange={handleSearch}
+                    value={query}
+                    onDebounceChange={setQuery}
                     placeholder="Search events by title or description..."
                 />
 
@@ -189,6 +109,34 @@ const Filters = ({ events, setFilteredEvents }: FilterProps) => {
                     />
                 </div>
 
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Sort By</label>
+                    <Controller
+                        control={control}
+                        name="sort"
+                        render={({ field }) => (
+                            <Select
+                                onValueChange={(value) => {
+                                    field.onChange(value)
+                                    handleFilterChange('sort', value)
+                                }}
+                                value={field.value}
+                            >
+                                <SelectTrigger className="w-full">
+                                    <div className="flex items-center">
+                                        <ArrowUpDown className="mr-2 h-4 w-4" />
+                                        <SelectValue placeholder="Sort options" />
+                                    </div>
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="date">Date</SelectItem>
+                                    <SelectItem value="title">Title</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        )}
+                    />
+                </div>
+
                 <Popover>
                     <PopoverTrigger asChild>
                         <Button
@@ -220,7 +168,6 @@ const Filters = ({ events, setFilteredEvents }: FilterProps) => {
                                                 watch={watch}
                                                 setValue={(name, value) => {
                                                     setValue(name, value)
-                                                    handleFilterChange(name, value?.toString() || '')
                                                 }}
                                             />
                                         )}
@@ -238,7 +185,6 @@ const Filters = ({ events, setFilteredEvents }: FilterProps) => {
                                                 watch={watch}
                                                 setValue={(name, value) => {
                                                     setValue(name, value)
-                                                    handleFilterChange(name, value?.toString() || '')
                                                 }}
                                             />
                                         )}

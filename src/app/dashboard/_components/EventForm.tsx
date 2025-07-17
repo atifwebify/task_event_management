@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FieldErrors, useForm } from 'react-hook-form';
+import { Controller, FieldErrors, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,6 +9,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Link as LinkIcon, Loader2Icon, MapPin } from 'lucide-react';
 import DateTime from './DateTime';
+
+const categories: string[] = ['Conference', 'Workshop', 'Webinar', 'Meetup', 'Hackathon', 'Other'];
+
 
 const eventSchema = z.object({
     title: z.string().min(3, 'Title must be at least 3 characters'),
@@ -52,7 +55,7 @@ interface EventFormProps {
 }
 
 export default function EventForm({ defaultValues, onSubmit, isEditing = false }: EventFormProps) {
-    const { register, handleSubmit, watch, setValue, formState: { errors, isSubmitting } } = useForm<EventFormData>({
+    const { register, control, handleSubmit, watch, setValue, formState: { errors, isSubmitting } } = useForm<EventFormData>({
         resolver: zodResolver(eventSchema),
         defaultValues,
     });
@@ -124,12 +127,31 @@ export default function EventForm({ defaultValues, onSubmit, isEditing = false }
                         <Label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
                             Category
                         </Label>
-                        <Input
-                            id="category"
-                            {...register('category')}
-                            placeholder="Enter category"
+
+                        <Controller
+                            control={control}
+                            name="category"
+                            render={({ field }) => (
+                                <Select onValueChange={field.onChange} value={field.value}>
+                                    <SelectTrigger id="category" className="w-full">
+                                        <SelectValue placeholder="Select category" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {categories.map((cat) => (
+                                            <SelectItem key={cat} value={cat}>
+                                                {cat}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            )}
                         />
-                        {errors.category && <p className="mt-1 text-sm text-red-600">{errors.category.message}</p>}
+
+                        {errors.category && (
+                            <p className="mt-1 text-sm text-red-600">
+                                {errors.category.message}
+                            </p>
+                        )}
                     </div>
                 </div>
 

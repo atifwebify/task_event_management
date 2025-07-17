@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Event } from '@/lib/db'
 import { Calendar, MapPin, Link as LinkIcon } from 'lucide-react'
+import { BiCategoryAlt } from "react-icons/bi";
 import Link from 'next/link'
 import { format } from 'date-fns'
 import {
@@ -40,7 +41,9 @@ export default function EventCard({ event }: { event: Event }) {
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
             <div className="p-6">
                 <div className="flex justify-between items-start">
-                    <h3 className="text-lg font-semibold text-gray-900">{event.title}</h3>
+                    <div>
+                        <h3 className="text-lg font-semibold text-gray-900">{event.title}</h3>
+                    </div>
                     <span
                         className={`px-2 py-1 text-xs rounded-full ${event.eventType === 'Online'
                             ? 'bg-blue-100 text-blue-800'
@@ -54,6 +57,12 @@ export default function EventCard({ event }: { event: Event }) {
                 <p className="text-sm text-gray-600 mt-2 line-clamp-2">{event.description}</p>
 
                 <div className="mt-4 space-y-2 text-sm">
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <BiCategoryAlt className="h-4 w-4 text-gray-500" />
+                        <span>
+                            {event.category}
+                        </span>
+                    </div>
                     <div className="flex items-center gap-2 text-sm text-gray-600">
                         <Calendar className="h-4 w-4 text-gray-500" />
                         <span>

@@ -70,10 +70,7 @@ export function FilterProvider({ events, children }: { events: Event[]; children
         router.push(`?${params.toString()}`, { scroll: false })
     }, [query, type, category, startDate, endDate, sort, router])
 
-    const categories = useMemo(() =>
-        Array.from(new Set(events.map(e => e.category))).sort(),
-        [events]
-    )
+    const categories: string[] = ['Conference', 'Workshop', 'Webinar', 'Meetup', 'Hackathon', 'Other'];
 
     const hasActiveFilters = useMemo(() => (
         query !== '' ||

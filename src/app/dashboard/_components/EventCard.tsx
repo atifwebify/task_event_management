@@ -76,10 +76,8 @@ export default function EventCard({ event }: { event: Event }) {
                 </div>
 
                 <div className="mt-6 flex space-x-2">
-                    <Link href={`/dashboard/events/${event.id}`}>
-                        <Button variant="outline" size="sm">
-                            Edit
-                        </Button>
+                    <Link href={`/dashboard/events/${event.id}`} className='link-btn'>
+                        Edit
                     </Link>
 
                     {/* Delete with confirmation */}

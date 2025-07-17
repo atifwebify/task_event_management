@@ -5,6 +5,7 @@ import { useEvents } from '@/context/EventsContext';
 import EventForm, { EventFormData } from '../../_components/EventForm';
 import { useEffect, useState } from 'react';
 import { Event } from '@/lib/db';
+import { Loader } from '../../_components/Loader';
 
 export default function EditEventPage() {
     const { id } = useParams();
@@ -39,7 +40,9 @@ export default function EditEventPage() {
     };
 
     if (!event) {
-        return <div>Loading...</div>;
+        return <div className='min-h-screen w-full flex items-center justify-center'>
+            <Loader />
+        </div>
     }
 
     return (

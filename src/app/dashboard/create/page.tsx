@@ -3,8 +3,6 @@
 import { useRouter } from 'next/navigation';
 import { useEvents } from '@/context/EventsContext';
 import EventForm, { EventFormData } from '../_components/EventForm';
-import { FormEventHandler, useState } from 'react';
-import { Event } from '@/lib/db';
 import { toast } from 'sonner';
 
 export default function CreateEventPage() {

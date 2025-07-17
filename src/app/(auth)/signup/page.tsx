@@ -5,7 +5,6 @@ import { useAuth } from '@/context/AuthContext';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
@@ -41,7 +40,6 @@ export default function SignupPage() {
     return (
         <div className="min-h-screen w-full bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
             <div className="w-full max-w-md">
-                {/* Branding Header */}
                 <div className="flex flex-col items-center mb-8">
                     <div className="flex items-center justify-center w-16 h-16 bg-indigo-100 rounded-2xl mb-4">
                         <Calendar className="h-8 w-8 text-indigo-600" />
@@ -50,7 +48,6 @@ export default function SignupPage() {
                     <p className="text-gray-600 mt-2 text-center">Create your account to get started</p>
                 </div>
 
-                {/* Signup Card */}
                 <div className="bg-white rounded-xl shadow-sm p-8">
                     <div className="mb-6">
                         <h2 className="text-2xl font-semibold text-gray-900">Create your account</h2>
@@ -121,16 +118,6 @@ export default function SignupPage() {
                             Log in
                         </Link>
                     </div>
-                </div>
-
-                {/* Footer Links */}
-                <div className="mt-8 flex justify-center space-x-4">
-                    <Link href="/privacy" className="text-sm text-gray-600 hover:text-gray-900">
-                        Privacy Policy
-                    </Link>
-                    <Link href="/terms" className="text-sm text-gray-600 hover:text-gray-900">
-                        Terms of Service
-                    </Link>
                 </div>
             </div>
         </div>

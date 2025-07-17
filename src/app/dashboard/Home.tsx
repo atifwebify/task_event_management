@@ -14,14 +14,13 @@ export default function Home() {
     const { events } = useEvents();
     const { user } = useAuth();
 
-    const [filteredEvents, setFilteredEvents] = useState(events || [])    
+    const [filteredEvents, setFilteredEvents] = useState(events || [])
 
-   
+
 
     if (user) {
         return (
             <div className="space-y-8 w-full p-6">
-                {/* Header Section */}
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <div>
                         <h1 className="text-3xl font-bold text-gray-900">Event Dashboard</h1>
@@ -35,17 +34,15 @@ export default function Home() {
                     </Link>
                 </div>
 
-                {/* Filters Section */}
                 <Filters setFilteredEvents={setFilteredEvents} events={events} />
 
-                {/* Events Grid */}
                 {filteredEvents.length === 0 ? (
                     <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
                         <div className="mx-auto max-w-md flex flex-col justify-center items-center">
                             <CalendarPlus className="mx-auto h-12 w-12 text-gray-400" />
                             <h3 className="mt-2 text-lg font-medium text-gray-900">No events found</h3>
                             <p className="mt-1 text-gray-500">
-                                    Get started by creating your first event
+                                Get started by creating your first event
                             </p>
                             <div className="mt-6">
                                 <Link href="/dashboard/create" className="button flex gap-2 items-center w-fit">

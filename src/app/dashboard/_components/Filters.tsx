@@ -9,7 +9,6 @@ import { Event } from '@/lib/db'
 import { useForm, Controller } from 'react-hook-form'
 import DateTime from '../_components/DateTime'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 
 type FilterType = 'All' | 'Online' | 'In-Person'

@@ -41,8 +41,8 @@ export function EventsProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateEvent = async (id: number, event: Partial<Event>) => {
-    if (event.startDateTime && event.endDateTime && 
-        checkTimeOverlap(event.startDateTime, event.endDateTime, id)) {
+    if (event.startDateTime && event.endDateTime &&
+      checkTimeOverlap(event.startDateTime, event.endDateTime, id)) {
       throw new Error('Event time overlaps with an existing event');
     }
     await db.events.update(id, event);
@@ -70,13 +70,13 @@ export function EventsProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <EventsContext.Provider value={{ 
-      events, 
-      addEvent, 
-      updateEvent, 
-      deleteEvent, 
+    <EventsContext.Provider value={{
+      events,
+      addEvent,
+      updateEvent,
+      deleteEvent,
       getEventById,
-      checkTimeOverlap 
+      checkTimeOverlap
     }}>
       {children}
     </EventsContext.Provider>
@@ -86,7 +86,7 @@ export function EventsProvider({ children }: { children: React.ReactNode }) {
 export function useEvents() {
   const context = useContext(EventsContext);
   if (context === undefined) {
-    throw new Error('useEvents must be used within an EventsProvider');
+    throw new Error('useEvents must be used within a EventsProvider');
   }
   return context;
 }

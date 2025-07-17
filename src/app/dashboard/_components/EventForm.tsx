@@ -168,7 +168,6 @@ export default function EventForm({ defaultValues, onSubmit, isEditing = false }
 
                 {/* Start and End Date */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Start */}
                     <DateTime<EventFormData>
                         label="Start Date & Time"
                         fieldName="startDateTime"
@@ -178,7 +177,6 @@ export default function EventForm({ defaultValues, onSubmit, isEditing = false }
                         error={errors.startDateTime?.message}
                     />
 
-                    {/* End */}
                     <DateTime<EventFormData>
                         label="End Date & Time"
                         fieldName="endDateTime"

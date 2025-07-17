@@ -10,6 +10,8 @@ import { Label } from '@/components/ui/label';
 import Link from 'next/link';
 import { Calendar } from 'lucide-react';
 import PasswordInput from '@/app/dashboard/_components/PasswordInput';
+import { useEffect } from 'react';
+import { Loader } from '@/app/dashboard/_components/Loader';
 
 const signupSchema = z.object({
     username: z.string().min(3, 'Username must be at least 3 characters'),
@@ -24,7 +26,7 @@ const signupSchema = z.object({
 type SignupFormData = z.infer<typeof signupSchema>;
 
 export default function SignupPage() {
-    const { signup } = useAuth();
+    const { signup, loading, user } = useAuth();
     const router = useRouter();
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<SignupFormData>({
         resolver: zodResolver(signupSchema),
@@ -36,6 +38,13 @@ export default function SignupPage() {
             router.push('/dashboard');
         }
     };
+
+    useEffect(() => {
+        if (!loading && user) {
+            router.push('/dashboard');
+        }
+    }, [loading, user, router]);
+
 
     return (
         <div className="min-h-screen w-full bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">

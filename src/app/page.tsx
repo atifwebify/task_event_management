@@ -1,7 +1,22 @@
+'use client'
 import Link from "next/link";
 import { CalendarCheck, Filter, Calendar } from 'lucide-react';
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { Loader } from "./dashboard/_components/Loader";
 
 export default function Home() {
+
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && user) {
+      router.push('/dashboard');
+    }
+  }, [loading, user, router]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <nav className="container mx-auto px-6 py-4 flex justify-between items-center">

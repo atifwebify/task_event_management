@@ -28,6 +28,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 if (loggedInUser && users.some(u => u.email === loggedInUser)) {
                     const user = users.find(u => u.email === loggedInUser);
                     if (user) setUser(user);
+                } else {
+                    return
                 }
             } catch (error) {
                 toast.error(error instanceof Error ? error.message : 'Failed to create event')

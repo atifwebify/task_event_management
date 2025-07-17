@@ -11,6 +11,8 @@ import Link from 'next/link';
 import { Calendar } from 'lucide-react';
 import PasswordInput from '@/app/dashboard/_components/PasswordInput';
 import { toast } from 'sonner';
+import { Loader } from '@/app/dashboard/_components/Loader';
+import { useEffect } from 'react';
 
 const loginSchema = z.object({
     email: z.string().email('Invalid email address'),
@@ -20,7 +22,7 @@ const loginSchema = z.object({
 type LoginFormData = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
-    const { login } = useAuth();
+    const { login, user, loading } = useAuth();
     const router = useRouter();
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginFormData>({
         resolver: zodResolver(loginSchema),
@@ -34,6 +36,12 @@ export default function LoginPage() {
             toast.error("Invalid Credentials")
         }
     };
+
+    useEffect(() => {
+        if (!loading && user) {
+            router.push('/dashboard');
+        }
+    }, [loading, user, router]);
 
     return (
         <div className="min-h-screen w-full bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">

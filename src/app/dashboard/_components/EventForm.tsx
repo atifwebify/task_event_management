@@ -62,10 +62,6 @@ export default function EventForm({ defaultValues, onSubmit, isEditing = false }
 
     const eventType = watch('eventType');
 
-    const onError = (errors: FieldErrors<EventFormData>) => {
-        console.log("❌ Erros", errors);
-    };
-
     return (
         <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-sm border border-gray-200 p-6 md:p-8">
             <div className="mb-8">
@@ -77,7 +73,7 @@ export default function EventForm({ defaultValues, onSubmit, isEditing = false }
                 </p>
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 <div>
                     <Label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
                         Event Title
@@ -155,7 +151,6 @@ export default function EventForm({ defaultValues, onSubmit, isEditing = false }
                     </div>
                 </div>
 
-                {/* Event Link or Location */}
                 {eventType === 'Online' ? (
                     <div>
                         <Label htmlFor="eventLink" className="block text-sm font-medium text-gray-700 mb-1">
@@ -188,7 +183,6 @@ export default function EventForm({ defaultValues, onSubmit, isEditing = false }
                     </div>
                 )}
 
-                {/* Start and End Date */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <DateTime<EventFormData>
                         label="Start Date & Time"

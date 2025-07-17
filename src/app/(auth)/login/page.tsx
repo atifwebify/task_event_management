@@ -11,7 +11,6 @@ import Link from 'next/link';
 import { Calendar } from 'lucide-react';
 import PasswordInput from '@/app/dashboard/_components/PasswordInput';
 import { toast } from 'sonner';
-import { Loader } from '@/app/dashboard/_components/Loader';
 import { useEffect } from 'react';
 
 const loginSchema = z.object({

@@ -19,7 +19,6 @@ const Filters = () => {
         resetFilters,
         hasActiveFilters 
     } = useFilter()
-
     const { control, watch, setValue } = methods
     const { startDate, endDate } = watch()
 

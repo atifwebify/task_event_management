@@ -88,8 +88,6 @@ export default function EventCard({ event }: { event: Event }) {
                     <Link href={`/dashboard/events/${event.id}`} className='link-btn'>
                         Edit
                     </Link>
-
-                    {/* Delete with confirmation */}
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
                             <Button variant="destructive" size="sm">Delete</Button>

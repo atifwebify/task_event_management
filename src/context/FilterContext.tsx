@@ -15,7 +15,6 @@ export type FilterForm = {
     endDate: Date | null
     sort: SortOption
 }
-
 interface FilterContextType {
     methods: UseFormReturn<FilterForm>
     filteredEvents: Event[]
@@ -37,6 +36,7 @@ export function FilterProvider({ events, children }: { events: Event[]; children
         defaultValue: T,
         parser?: (val: string) => T
     ): T => {
+
         const param = searchParams.get(key)
         if (!param) return defaultValue
 
@@ -57,8 +57,8 @@ export function FilterProvider({ events, children }: { events: Event[]; children
     const { type, category, startDate, endDate, sort } = watch()
     const [query, setQuery] = useState(getInitialValue<string>('query', ''))
 
-    // Update URL when filters change
     useEffect(() => {
+
         const params = new URLSearchParams()
         if (query) params.set('query', query)
         if (type !== 'All') params.set('type', type)
@@ -82,9 +82,11 @@ export function FilterProvider({ events, children }: { events: Event[]; children
         startDate !== null ||
         endDate !== null ||
         sort !== 'date'
+
     ), [query, type, category, startDate, endDate, sort])
 
     const filteredEvents = useMemo(() => {
+
         const result = events.filter(event => {
             const matchesQuery = !query ||
                 [event.title, event.description].some(field =>
@@ -104,6 +106,8 @@ export function FilterProvider({ events, children }: { events: Event[]; children
             : [...result].sort((a, b) => (
                 new Date(a.startDateTime).getTime() - new Date(b.startDateTime).getTime()
             ))
+
+
     }, [events, query, type, category, startDate, endDate, sort])
 
     const resetFilters = () => {

@@ -40,7 +40,6 @@ export default function DateTime<T extends FieldValues>({
             <Label className="block text-sm font-medium text-gray-700 mb-1">
                 {label}
             </Label>
-
             <Popover>
                 <PopoverTrigger asChild>
                     <Button
@@ -70,7 +69,6 @@ export default function DateTime<T extends FieldValues>({
                         }}
                         initialFocus
                     />
-
                     <div className="p-3 border-t">
                         <Input
                             type="time"

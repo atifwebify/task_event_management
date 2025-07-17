@@ -10,7 +10,6 @@ interface DebouncedSearchProps {
     delay?: number;
     placeholder?: string
 }
-
 export function DebouncedSearchInput({ value, onDebounceChange, placeholder, delay = 300 }: DebouncedSearchProps) {
     const [localValue, setLocalValue] = useState(value);
 

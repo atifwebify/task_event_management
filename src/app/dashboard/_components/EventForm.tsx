@@ -58,6 +58,7 @@ export default function EventForm({ defaultValues, onSubmit, isEditing = false }
     const { register, control, handleSubmit, watch, setValue, formState: { errors, isSubmitting } } = useForm<EventFormData>({
         resolver: zodResolver(eventSchema),
         defaultValues,
+        reValidateMode: "onChange"
     });
 
     const eventType = watch('eventType');
@@ -104,18 +105,20 @@ export default function EventForm({ defaultValues, onSubmit, isEditing = false }
                         <Label htmlFor="eventType" className="block text-sm font-medium text-gray-700 mb-1">
                             Event Type
                         </Label>
-                        <Select
-                            value={watch('eventType')}
-                            onValueChange={(value) => setValue('eventType', value as 'Online' | 'In-Person')}
-                        >
-                            <SelectTrigger className='w-full'>
-                                <SelectValue placeholder="Select event type" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="Online">Online</SelectItem>
-                                <SelectItem value="In-Person">In-Person</SelectItem>
-                            </SelectContent>
-                        </Select>
+                        <Controller
+                            control={control}
+                            name="eventType"
+                            render={({ field }) => (
+                                <Select onValueChange={field.onChange} value={field.value}>
+                                    <SelectTrigger className='w-full'>
+                                        <SelectValue placeholder="Select event type" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="Online">Online</SelectItem>
+                                        <SelectItem value="In-Person">In-Person</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            )} />
                         {errors.eventType && <p className="mt-1 text-sm text-red-600">{errors.eventType.message}</p>}
                     </div>
 
@@ -187,7 +190,7 @@ export default function EventForm({ defaultValues, onSubmit, isEditing = false }
                     <DateTime<EventFormData>
                         label="Start Date & Time"
                         fieldName="startDateTime"
-                        disabled={new Date(new Date().setDate(new Date().getDate() - 1))}
+                        disabled={new Date()}
                         watch={watch}
                         setValue={setValue}
                         error={errors.startDateTime?.message}
@@ -196,7 +199,7 @@ export default function EventForm({ defaultValues, onSubmit, isEditing = false }
                     <DateTime<EventFormData>
                         label="End Date & Time"
                         fieldName="endDateTime"
-                        disabled={watch("startDateTime") || new Date(new Date().setDate(new Date().getDate() - 1))}
+                        disabled={watch("startDateTime") || new Date()}
                         watch={watch}
                         setValue={setValue}
                         error={errors.endDateTime?.message}

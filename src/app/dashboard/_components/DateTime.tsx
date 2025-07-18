@@ -59,12 +59,21 @@ export default function DateTime<T extends FieldValues>({
                         mode="single"
                         selected={value instanceof Date ? value : undefined}
                         disabled={(date) => {
-                            const startDate = disabled as Date
-                            return date < startDate
+                            if (disabled instanceof Date) {
+                                const selected = new Date(date.getFullYear(), date.getMonth(), date.getDate())
+                                const minDate = new Date(disabled.getFullYear(), disabled.getMonth(), disabled.getDate())
+                                return selected < minDate
+                            }
+                            return false
                         }}
+
                         onSelect={(date) => {
                             if (date) {
-                                setValue(fieldName, date as T[typeof fieldName], { shouldDirty: true });
+                                setValue(fieldName, date as T[typeof fieldName], {
+                                    shouldDirty: true,
+                                    shouldValidate: true,
+                                    shouldTouch: true,
+                                })
                             }
                         }}
                         initialFocus
@@ -79,7 +88,11 @@ export default function DateTime<T extends FieldValues>({
                                     const [hours, minutes] = time.split(':').map(Number);
                                     const updatedDate = new Date(value);
                                     updatedDate.setHours(hours, minutes);
-                                    setValue(fieldName, updatedDate as T[typeof fieldName], { shouldDirty: true });
+                                    setValue(fieldName, updatedDate as T[typeof fieldName], {
+                                        shouldDirty: true,
+                                        shouldValidate: true,
+                                        shouldTouch: true,
+                                    });
                                 }
                             }}
                         />

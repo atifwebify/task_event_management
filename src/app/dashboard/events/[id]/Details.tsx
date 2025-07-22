@@ -1,7 +1,6 @@
 'use client'
 import { useEventDetails } from '@/context/EventDetailsContext'
-import { useEvents } from '@/context/EventsContext'
-import React, { useEffect } from 'react'
+import React from 'react'
 
 const Details = ({ id }: { id: string }) => {
 

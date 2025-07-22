@@ -13,28 +13,27 @@ interface context {
     event?: Event | null
 }
 
-const EventDetailsContext = createContext<context>({})
+const EventDetailsContext = createContext<context | undefined>(undefined)
 
 
 export const EventDetailProvider = ({ id, children }: detailsContext) => {
 
-    const [event, setEvent] = useState<Event | null>(null)
+    const [event, setEvent] = useState<Event | undefined>(undefined)
 
-    console.log(id)
-
-    const loadDetailEvent = async () => {
-        const event = await db.events.where({ id: id }).first();
+    const loadDetailEvent = async (id: string) => {
+        const event = await db.events.where({ id: Number(id) }).first();
         if (!event) {
             toast.error("Event Not found")
             return false;
         }
         setEvent(event)
-        return event
     }
 
     useEffect(() => {
-        loadDetailEvent()
-    },[])
+        if (id) {
+            loadDetailEvent(id)
+        }
+    }, [id])
 
     return <EventDetailsContext.Provider value={{ event }}>
         {children}
@@ -44,5 +43,8 @@ export const EventDetailProvider = ({ id, children }: detailsContext) => {
 
 export const useEventDetails = () => {
     const context = useContext(EventDetailsContext)
+    if (context === undefined) {
+        throw new Error('Eevent Details must be used within a EventsDetailsProvider');
+    }
     return context;
 }

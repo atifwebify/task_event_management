@@ -85,8 +85,11 @@ export default function EventCard({ event }: { event: Event }) {
                 </div>
 
                 <div className="mt-6 flex space-x-2">
-                    <Link href={`/dashboard/events/${event.id}`} className='link-btn'>
+                    <Link href={`/dashboard/events/edit/${event.id}`} className='link-btn'>
                         Edit
+                    </Link>
+                    <Link href={`/dashboard/events/${event.id}`} className='link-btn'>
+                        View Details
                     </Link>
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
